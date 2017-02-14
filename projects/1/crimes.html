@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chicago Crimes</title>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <style>
+            html, body {
+                background-color:#4286f4;
+            }
+            p, h2 {font-family: 'Montserrat', sans-serif;}
+            p {font-size:1.5em;line-height:1.5em; margin-left: 24px;}
+            pre {font-size: 2em;}
+            h1 { text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-style:italic;
+            }
+            #results {
+                background-color: #f9cd1b; 
+                border: 1px solid black; 
+                border-radius: 6px;
+                min-height:75px;
+                padding:15px;
+                font-family: 'Montserrat', sans-serif;}
+            #input {
+                background-color:#4fea69; 
+                border: 1px solid black; 
+                border-radius: 6px;
+                min-height:75px;
+                padding:15px;
+                font-family: 'Montserrat', sans-serif;
+            }
+            #txtYear{
+                width: 200px;
+                margin: 0 auto;
+                padding: 3px 10px;
+                border-radius: 5px;
+            }
+            #txtType {
+    position: relative;
+    width: 200px;
+    margin: 0 auto;
+    padding: 3px 10px;
+
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-out;
+}
+        #btnSearch{
+            border-radius: 5px;
+        }
+
+
+
+        </style>
+    </head>
+    <body>
+    <h1><a href="https://data.cityofchicago.org/resource/6zsd-86xi">Crimes From 2001 to Present</a></h1>
+    <h2>By: Albert Hunt and Jovanni Rios</h2>
+    <p>Description: This app searches up crime types and when they happen, you can select the crime type and/or the crime year.</p>
+    <!-- div for instructions and form -->
+    <div id="input">
+        <p>
+            Enter the crime year and/or crime type below. After doing so, click outside of the input box then click "Search".
+            <br>
+        <input id="txtYear" type="text" placeholder="Enter the crime year here."></input>
+        <select id="txtType">
+<option>No Specific Crime Type</option>
+<option>WEAPONS VIOLATION</option>
+<option>THEFT</option>
+<option>STALKING</option>
+<option>SEX OFFENSE</option>
+<option>ROBBERY</option>
+<option>RITUALISM</option>
+<option>PUBLIC PEACE VIOLATION</option>
+<option>PUBLIC INDECENCY</option>
+<option>PROSTITUTION</option>
+<option>OTHER OFFENSE</option>
+<option>OTHER NARCOTIC VIOLATION</option>
+<option>OFFENSE INVOLVING CHILDREN</option>
+<option>OBSCENITY</option>
+<option>NON-CRIMINAL</option>
+<option>NON - CRIMINAL</option>
+<option>NARCOTICS</option>
+<option>MOTOR VEHICLE THEFT</option>
+<option>LIQUOR LAW VIOLATION</option>
+<option>KIDNAPPING</option>
+<option>INTIMIDATION</option>
+<option>INTERFERENCE WITH PUBLIC OFFICER</option>
+<option>HUMAN TRAFFICKING</option>
+<option>HOMICIDE</option>
+<option>GAMBLING</option>
+<option>DOMESTIC VIOLENCE</option>
+<option>DECEPTIVE PRACTICE</option>
+<option>CRIM SEXUAL ASSAULT</option>
+<option>CRIMINAL TRESPASS</option>
+<option>CRIMINAL DAMAGE</option>
+<option>CONCEALED CARRY LICENSE VIOLATION</option>
+<option>BURGLARY</option>
+<option>BATTERY</option>
+<option>ASSAULT</option>
+<option>ARSON</option>
+</select>
+        <button type="button" id="btnSearch">Search</button>
+    </div>
+<br>
+    <!-- a div to store the results -->
+    <div id="results">
+        
+        
+        
+    </div>
+    
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+    
+        $("#results").hide();
+        var linkText = "Click here for the official City of Chicago website"
+               $(function() {
+            
+            var baseUrl = "https://data.cityofchicago.org/resource/6zsd-86xi.json";
+    
+    
+    $(document).ready(function (){
+    validate();
+    $('#txtYear, #txtType').change(validate);
+    });
+
+    function validate(){
+    if ($('#txtYear').val().length   >   0   ||
+        $('#txtType').val()  !=   "No Specific Crime Type") {
+        $("#btnSearch").prop("disabled", false);
+    }
+    else {
+        $("#btnSearch").prop("disabled", true);
+    }
+}        
+            //console.log(url);
+            
+            $("#btnSearch").on("click", function() {
+                  var lengthType = $("#txtType").val().length;
+                  var lengthYear = $("#txtYear").val().length;
+                  //console.log(lengthType)
+                  $("#results").html("");
+                  $("#results").show();
+                      var searchType = $("#txtType").val();
+                      if (searchType == "No Specific Crime Type"){
+                          lengthType= 0 ;
+                      }
+                      var searchYear = $("#txtYear").val();
+                     // searchType = searchType.replace(' ','+')
+                      if (lengthType > 0 && lengthYear > 0){
+                  var searchUrl = baseUrl + "?year=" + searchYear + "&primary_type=" + searchType;
+                      }
+                  else if (lengthYear == 0) {
+                      searchUrl = baseUrl + "?primary_type=" + searchType;
+                  }
+                  else if (lengthType == 0) { 
+                      searchUrl = baseUrl + "?year=" + searchYear;
+                  }
+                  console.log(searchUrl);
+                  
+                  $.getJSON(searchUrl)
+                    .done(function(data){
+                       
+                       //console.log(data);
+                       
+                       $.each(data, function(index, value){
+                            //console.log(value.snippet);
+                            
+                            
+                            $("#results").append(
+                                "<div>"
+                                +"<p>"
+                                +"ID: " + value.id
+                                +"<br>"
+                                + "Date: " + value.date
+                                +"<br>"
+                                + "Year: " + value.year
+                                +"<br>"
+                                + "Crime Type: "+value.primary_type
+                                + "<br>"
+                                + "Description: " +value.description
+                                + "<br>"
+                                + "Location Description: "+ value.location_description
+                                + "<br>"
+                                + "Block: "+value.block
+                                + "<br>"
+                                + "District: "+value.district
+                                + "<br>"
+                                + "Ward: "+value.ward
+                                + "<br>"
+                                + linkText.link("https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-present/ijzp-q8t2")
+                                + "<br>"
+                                + "<hr>"
+                                + "</p>");
+                        })
+                    })
+            });
+            
+            
+            
+            
+            
+            
+            
+        })
+        
+        
+    
+    
+    </script>
+    </body>
+</html>
