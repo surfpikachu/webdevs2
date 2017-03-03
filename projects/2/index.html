@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery.parseXML demo</title>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <style> 
+  body{background-color:#7aa9f4;}
+    #rtX49{
+    background-color: #2bd157;
+    border: solid black 1px;
+    padding: 5px;
+    border-radius:2px;
+  }
+  #rt49{
+    background-color: yellow;
+    border: solid black 1px;
+    padding: 5px;
+    border-radius:2px;
+  }
+  #rt152{
+    background-color: #2bd157;
+    border: solid black 1px;
+    padding: 5px;
+    border-radius:2px;
+  }
+  #submit{border-radius:2px;
+      background-color:orange;
+  }
+  </style>
+</head>
+<body>
+    <h1>Lane Tech Bus Tracker</h1>
+ <p>Press the button to see buses near Lane Tech</p>
+ <center><button id="submit">View Buses Near Lane Tech</button></center>
+ <br>
+ <div id="rtX49"></div>
+ <div id="rt49"></div>
+ <div id="rt152"></div>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script>
+      $("#rtX49").hide()
+      $("#rt49").hide()
+      $("#rt152").hide()
+      $("#submit").click(function() {
+         $("#rtX49").empty().show()
+         $("#rt49").empty().show()
+         $("#rt152").empty().show()
+          
+          var apiPassThruUrl = "https://polar-garden-75406.herokuapp.com/apiPassThru.php";
+          
+          var apiEndpoint = "http://ctabustracker.com/bustime/api/v2/getpredictions";
+          
+          
+          $.ajax({
+              url: apiPassThruUrl,
+              dataType: "json",
+              method: 'GET',
+              data: {"apiEndpoint": apiEndpoint,
+                      "key" : "2iarWD3P3ws4fid45HWRHY4TR",
+                      "format":"json",
+                      "rt":"49,X49,152",
+                      "stpid":"8417,12527,12569,8195"
+              }
+            }).done (function (data) {
+              console.log(data);
+             $("#rtX49").append("<h2>Route X49</h2>")
+             $("#rt49").append("<h2>Route 49</h2>")
+             $("#rt152").append("<h2>Route 152</h2>")
+              $.each(data["bustime-response"]["prd"], function(i,v) {
+                  $("#rt" + v.rt).append("Route Number: " + v.rt
+                  +  "<br>" 
+                  + "Route Direction: " + v.rtdir 
+                  + "<br>"
+                  + "Scheduled Arrival Time: " + v.prdtm  
+                  + "<br>"
+                  +  "Time left until arrival: " + v.prdctdn + " minutes"
+                  + "<br>"
+                  + "Delay: " + v.dly
+                  + "<br>"
+                  + "Destination: " + v.des
+                  + "<br>"
+                  + "Bus Number: " + v.vid
+                  + "<hr>");
+              })
+
+            });
+        });
+           
+         
+  
+</script>
+ 
+</body>
+</html>
