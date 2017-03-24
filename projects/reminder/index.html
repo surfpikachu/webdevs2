@@ -1,0 +1,260 @@
+<html>
+  <head>
+    <!-- Material Design Lite -->
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue-light_blue.min.css">
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="manifest" href="./manifest.json">
+    <style>
+      .screen {display: none;}
+      .hide {display: none;}
+      #list0 {display: none;}
+      #error {display: none;}
+      .list1 {display: none;}
+      .list2 {display: none;}
+      .list3 {display: none;}
+      .list4 {display: none;}
+      #error2 {display: none;}
+      #reminder1 {display:none;}
+      #reminder2 {display:none;}
+      #reminder3 {display:none;}
+      #reminder4 {display:none;}
+      table{border:collapse;}
+      table, th, td{border:1px solid black;}
+    </style>
+  </head>
+  <body>
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <!-- Title -->
+          <span class="mdl-layout-title">Reminder</span>
+          <!-- Add spacer, to align navigation to the right -->
+          <div class="mdl-layout-spacer"></div>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Reminder</span>
+        <nav class="mdl-navigation">
+          <a id="link1" class="mdl-navigation__link" href="#">Reminder</a>
+          <a id="link2" class="mdl-navigation__link" href="#">Settings</a>
+          <a id="link3" class="mdl-navigation__link" href="#">Schedule</a>
+        </nav>
+      </div>
+      <main class="mdl-layout__content">
+        <div id="remind" class="screen page-content">
+          <h1>Remind Me</h1>
+          <ul>
+            <li id="list0" class="list0"></li>
+            <li id="list1" class="list1"></li>
+            <li id="list2" class="list2"></li>
+            <li id="list3" class="list3"></li>
+            <li id="list4" class="list4"></li>
+          </ul>
+        </div>
+        <div id="settings" class="screen page-content">
+          <h1>Settings</h1>
+          <p id="error">Error: You may only have 5 reminders.</p>
+          <p id="error2">Error: You may not have less than 1 reminder.</p>
+            <button id="Add" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+              <i class="material-icons">add</i>
+            </button>
+            <button id="Subtract" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+              <i class="material-icons">highlight_off</i>
+            </button>
+            <br>
+          <p id="reminder0">Reminder 1</p>
+          <input type="text" class="list0" id="input0">
+          <br>
+          <p id="reminder1">Reminder 2</p>
+          <input type="text" class="list1" id="input1">
+          <br>
+          <p id="reminder2">Reminder 3</p>
+          <input type="text" class="list2" id="input2">
+          <br>
+          <p id="reminder3">Reminder 4</p>
+          <input type="text" class="list3" id="input3">
+          <br>
+          <p id="reminder4">Reminder 5</p>
+          <input type="text" class="list4" id="input4">
+            <br>
+            <br>
+          <button id="Save" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+              Save
+          </button>
+        </div>
+        <div id="schedule" class="screen page-content">
+          <h1>Schedule</h1>
+          <table>
+            <tr>
+              <th>Period</th>
+              <th>Class</th>
+              <th>Time</th>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>H Spanish II</td>
+              <td>8:00-8:50</td>
+              </tr>
+              <tr>
+              <td>2</td>
+              <td>H Web Dev</td>
+              <td>8:55-9:45</td>
+              </tr>
+              <tr>
+              <td>3</td>
+              <td>H Geometry</td>
+              <td>9:50-10:40</td>
+              </tr>
+              <tr>
+              <td>4</td>
+              <td>English</td>
+              <td>10:45-11:35</td>
+              </tr>
+              <tr>
+              <td>5</td>
+              <td>Lunch</td>
+              <td>11:40-12:30</td>
+              </tr>
+              <tr>
+              <td>6</td>
+              <td>H Economics</td>
+              <td>12:35-1:25</td>
+              </tr>
+              <tr>
+              <td>7</td>
+              <td>Driver's Ed</td>
+              <td>1:30-2:20</td>
+              </tr>
+              <tr>
+              <td>8</td>
+              <td>H Chemistry</td>
+              <td>2:25-3:15</td>
+          </table>
+        </div>
+      </main>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+    var click = 0;
+    var add = 0;
+    var listitem= 'list0';
+    var reminderitem='#reminder0'
+    var inputitem= '#input0'
+    var val0;
+    var val1;
+    var val2;
+    var val3;
+    var val4;
+      $(function() {
+        
+        $("#remind").show();
+        $("#link1").on("click", function() {
+          $(".screen").hide();
+          $("#remind").show();
+        });
+        
+        $("#link2").on("click", function() {
+          $(".screen").hide();
+          $("#settings").show();
+        });
+        
+        $("#link3").on("click", function() {
+          $(".screen").hide();
+          $("#schedule").show();
+        });
+      $("#Add").on("click", function() {
+        click = click + 1;
+        add = add + 1; 
+        listitem ='list' + add;
+        reminderitem ='reminder' + add;
+        if (add == 0){
+          $("#Subtract").prop("disabled",true);
+          $("#error2").show();
+        }
+        else if (add <= 4 && add != 0){
+          $("#error").hide();
+          $("." + listitem).show();
+          $("#Subtract").prop("disabled",false);
+          $("#error2").hide();
+          $("#" + reminderitem).show();
+        }
+        else if (add > 4){
+          $("#error").show();
+          $("#Add").prop("disabled",true);
+          $("#Subtract").prop("disabled",false);
+          add = 4;
+          $("#error2").hide();
+        }
+        console.log(add);
+      });
+      
+        
+        $("#Subtract").on("click", function(){
+          if (add >= 1){
+          $("." + listitem).hide();
+          $("#" + reminderitem).hide();
+          add = add - 1;
+          click = click - 1;
+          listitem = "list" + add;
+          reminderitem = "reminder" + add;
+          $("#Add").prop("disabled",false);
+          $("#error2").hide();
+          }
+          else if (add == 0){
+          $("#Subtract").prop("disabled",true);  
+          $("#error2").show();
+          }
+        });
+
+        $("#Save").on("click", function(){
+          val0 = $("#input0").val();
+          val1 = $("#input1").val();
+          val2 = $("#input2").val();
+          val3 = $("#input3").val();
+          val4 = $("#input4").val();
+          $("#list0").html(val0);
+          $("#list1").html(val1);
+          $("#list2").html(val2);
+          $("#list3").html(val3);
+          $("#list4").html(val4);
+          console.log
+          if (val0 == ""){
+            $("#list0").hide();
+          } else {$("#list0").show();}
+                      if (val1 == ""){
+            $("#list1").hide();
+                      } else {$("#list1").show();}
+                      if (val2 == ""){
+            $("#list2").hide();
+                      } else {$("#list2").show();}
+                      if (val3 == ""){
+            $("#list3").hide();
+                      } else {$("#list3").show();}
+                      if (val4 == ""){
+            $("#list4").hide();
+                      } else {$("#list4").show();}
+        click = 0;
+        add = 0;
+      });
+});
+      
+      
+    </script>
+    
+  </body>
+  <script>
+  if ('serviceWorker' in navigator) {
+    console.log("Will the service worker register?");
+    navigator.serviceWorker.register('service-worker.js')
+      .then(function(reg){
+        console.log("Yes, it did.");
+      }).catch(function(err) {
+        console.log("No it didn't. This happened: ", err)
+      });
+  }
+</script>
+</html>
