@@ -1,0 +1,207 @@
+<html>
+
+<head>
+  <link rel="manifest" href="./manifest.json">
+  <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <!-- Material Design Lite -->
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <!-- Material Design icon font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<body>
+  <!-- Simple header with fixed tabs. -->
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+                mdl-layout--fixed-tabs">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">Bus Tracker V2</span>
+      </div>
+      <!-- Tabs -->
+      <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+        <a href="#fixed-tab-1" class="mdl-layout__tab is-active">Bus Information Display</a>
+        <a href="#fixed-tab-2" class="mdl-layout__tab">Current Buses Added</a>
+        <a href="#fixed-tab-3" class="mdl-layout__tab">Add New Bus</a>
+      </div>
+    </header>
+    <main class="mdl-layout__content">
+      <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
+        <div class="page-content">
+          <h1>Personalized Bus Tracker</h1>
+          <p>Press the button to see the buses you've added.</p>
+          <center><button id="submit">View Buses</button></center>
+          <br>
+        </div>
+      </section>
+      <section class="mdl-layout__tab-panel" id="fixed-tab-2">
+        <div class="page-content">
+
+
+
+        </div>
+      </section>
+      <section class="mdl-layout__tab-panel" id="fixed-tab-3">
+        <div class="page-content">
+          <select id="routes">
+                <option>Select Route</option>
+              </select>
+
+          <select id="directions">
+                <option>Select Direction</option>
+              </select>
+
+          <select id="stops">
+                <option>Select Stop</option>
+              </select>
+          <button id="save">Save</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+    $(function() {
+
+
+      var apiPassThruUrl = "https://polar-garden-75406.herokuapp.com/apiPassThru.php";
+
+      var apiEndpoint = "http://ctabustracker.com/bustime/api/v2/getroutes";
+      var db = new Dexie("busDB");
+      db.version(1).stores({
+        route: '++id,routeId,routeName,direction,stopId,stopName,datetime'
+      });
+
+      $.ajax({
+        url: apiPassThruUrl,
+        dataType: "json",
+        method: 'GET',
+        data: {
+          "apiEndpoint": apiEndpoint,
+          "key": "2iarWD3P3ws4fid45HWRHY4TR",
+          "format": "json"
+        }
+      }).done(function(data) {
+
+
+        $.each(data["bustime-response"]["routes"], function(i, v) {
+          var option = $("<option>");
+          option.attr("value", v.rt);
+          option.text(v.rt + " - " + v.rtnm);
+          $("#routes").append(option);
+
+        });
+        //console.log(data);
+        $.each(data["bustime-response"]["prd"], function(i, v) {
+          $("#rt" + v.rt).append("Route Number: " + v.rt +
+            "<br>" +
+            "Route Direction: " + v.rtdir +
+            "<br>" +
+            "Scheduled Arrival Time: " + v.prdtm +
+            "<br>" +
+            "Time left until arrival: " + v.prdctdn + " minutes" +
+            "<br>" +
+            "Delay: " + v.dly +
+            "<br>" +
+            "Destination: " + v.des +
+            "<br>" +
+            "Bus Number: " + v.vid +
+            "<hr>");
+        });
+        $("#routes").on("change", function() {
+
+          $("#directions option").remove();
+          $("#directions").append("<option>Select Direction</option>");
+          var apiEndpoint = "http://ctabustracker.com/bustime/api/v2/getdirections";
+
+
+          $.ajax({
+            url: apiPassThruUrl,
+            dataType: "json",
+            method: 'GET',
+            data: {
+              "apiEndpoint": apiEndpoint,
+              "key": "2iarWD3P3ws4fid45HWRHY4TR",
+              "format": "json",
+              "rt": $("#routes").val()
+            }
+          }).done(function(data) {
+            console.log(data);
+            $.each(data["bustime-response"]["directions"], function(i, v) {
+              var option = $("<option>");
+              option.attr("value", v.dir);
+              option.text(v.dir);
+              $("#directions").append(option);
+            });
+            $.each(data["bustime-response"]["routes"], function(i, v) {
+              db.routes.add({
+                routeName: v.rtnm,
+                routeId: v.rt,
+                direction: v.employee_annual_salary,
+                stopId: v.stpid,
+                stopName: v.stpnm
+          });
+        });
+        $("#directions").on("change", function() {
+          $("#stops option").remove();
+          $("#stops").append("<option>Select Stop</option>");
+          $("#routes").on("change", function() {
+            $("#stops option").remove();
+            $("#stops").append("<option>Select Stop</option>");
+          });
+          var apiEndpoint = "http://www.ctabustracker.com/bustime/api/v2/getstops";
+
+
+          $.ajax({
+            url: apiPassThruUrl,
+            dataType: "json",
+            method: 'GET',
+            data: {
+              "apiEndpoint": apiEndpoint,
+              "key": "2iarWD3P3ws4fid45HWRHY4TR",
+              "format": "json",
+              "rt": $("#routes").val(),
+              "dir": $("#directions").val()
+            }
+          }).done(function(data) {
+            console.log(data);
+            $.each(data["bustime-response"]["stops"], function(i, v) {
+              var option = $("<option>");
+              option.attr("value", v.stpid);
+              option.text(v.stpid + " - " + v.stpnm);
+              $("#stops").append(option);
+            });
+
+            $("#save").on("click", function() {
+              db.routes.add({
+                routeName: $('#routes').val(),
+                stopName: $('#stops').val(),
+                direction: $('#direction').val(),
+              });
+
+            });
+
+          });
+        });
+      });
+    }); 
+    </script>
+  <script>
+    var routes = [];
+    var stops = [];
+    routes.push("15");
+    routes.push("27");
+    routes.push("49");
+    $(function() {
+      $(".delete").on("click", function() {
+        var itemId = $(this).attr("id");
+      });
+
+    });
+  </script>
+</body>
+
+</html>

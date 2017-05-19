@@ -1,0 +1,29 @@
+{
+  "name": "Lane Tech CTA Tracker",
+  "short_name": "LT CTA",
+  "icons": [{
+    "src": "http://static.hudl.com/users/prod/1277467_56237f403e5b49f6a84b240e99c9e9cd.jpg",
+      "sizes": "128x128",
+      "type": "image/jpg"
+    }, {
+      "src": "http://static.hudl.com/users/prod/1277467_56237f403e5b49f6a84b240e99c9e9cd.jpg",
+      "sizes": "144x144",
+      "type": "image/jpg"
+    }, {
+      "src": "http://static.hudl.com/users/prod/1277467_56237f403e5b49f6a84b240e99c9e9cd.jpg",
+      "sizes": "152x152",
+      "type": "image/jpg"
+    }, {
+      "src": "http://static.hudl.com/users/prod/1277467_56237f403e5b49f6a84b240e99c9e9cd.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    }, {
+      "src": "http://static.hudl.com/users/prod/1277467_56237f403e5b49f6a84b240e99c9e9cd.jpg",
+      "sizes": "256x256",
+      "type": "image/jpg"
+    }],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#3E4EB8",
+  "theme_color": "#2F3BA2"
+}
