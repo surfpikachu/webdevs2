@@ -136,13 +136,7 @@
               option.text(v.dir);
               $("#directions").append(option);
             });
-            $.each(data["bustime-response"]["routes"], function(i, v) {
-              db.routes.add({
-                routeName: v.rtnm,
-                routeId: v.rt,
-                direction: v.employee_annual_salary,
-                stopId: v.stpid,
-                stopName: v.stpnm
+
           });
         });
         $("#directions").on("change", function() {
@@ -187,8 +181,8 @@
           });
         });
       });
-    }); 
-    </script>
+    });
+  </script>
   <script>
     var routes = [];
     var stops = [];
