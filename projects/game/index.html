@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .obj{display:none;}
+    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Canvas Game</title>
+    <script src="jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="900" height="450" style="border:1px solid #d3d3d3;"></canvas>
+    <img class="obj" id="car" src="./green-convertible.png" alt="car">
+    <img class="obj" id="road" src="./road-line.jpg" alt="road">
+    <img class="obj" id="gas" src="./gas-can.png" alt="gas">
+    <img class="obj" id="person" src="./person.png" alt="person">
+    <!-- 
+      need a canvas element here
+    
+    -->
+    
+    
+    
+    <script>
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      var livesRemaining = 1;
+      var score = 0;
+      var level = 0;
+      var paused = false;
+      var player = {x: 20, y: 30, costume: "", speed: 1};
+      var harm = {x: 900, y: 450, costume: "", speed: 1};
+      var benefit = {x: 900, y: 450, costume: ""};
+      /*
+      
+        main animation loop
+      
+      */
+      function animate() {
+       ctx.clearRect(0,0,c.width,c.height);
+var hcollide = true;
+        // update harm and benefit x coordinates
+       
+         if (harm.x >= 900 || harm.x <= 0){
+           var randomH = Math.floor((Math.random() * 4) + 1);
+           level = level + 1;
+          if (randomH == 1){
+            harm.y = 20;
+            harm.x = 825;
+            hcollide= true;
+          }
+          if (randomH == 2){
+             harm.y = 130;
+             harm.x = 825;
+             hcollide= true;
+          }
+          if (randomH == 3){
+             harm.y = 245;
+             harm.x = 825;
+             hcollide= true;
+          }
+          if (randomH == 4){
+             harm.y = 350;
+             harm.x = 825;
+             hcollide= true;
+        } 
+         }
+         var randomB = Math.floor((Math.random() * 4) + 1);
+         if(randomH == randomB){
+             randomB = Math.floor((Math.random() * 4) + 1);
+           }
+         if(benefit.x >= 900 || benefit.x <= 0){
+        if (randomB == 1){
+            benefit.y = 20;
+            benefit.x = 825;
+          }
+          if (randomB == 2){
+             benefit.y = 130;
+             benefit.x = 825;
+          }
+          if (randomB == 3){
+             benefit.y = 245;
+             benefit.x = 825;
+          }
+          if (randomB == 4){
+             benefit.y = 350;
+             benefit.x = 825;
+        } 
+      }
+        // check for and handle edge condition
+        if (harm.speed != level){
+          harm.speed = level;
+        }
+        benefit.x = benefit.x - 5;
+        harm.x = harm.x - harm.speed - 4;
+        // draw background
+        
+        var imgG = document.getElementById("road");
+        ctx.drawImage(imgG, 0, 0, 900, 450);
+        //  draw player
+
+      var img = document.getElementById("car");
+      ctx.drawImage(img, player.x, player.y, 225, 75);
+        // draw harm 
+        
+        var imgH = document.getElementById("person");
+        ctx.drawImage(imgH, harm.x, harm.y, 50, 80);
+        
+        // check for and handle harm collision
+      if (Math.abs(player.y - harm.y) < 20 && player.x >= harm.x && hcollide == true){
+          if(livesRemaining > 0){
+          livesRemaining = livesRemaining - 1;
+          hcollide= false;
+          }
+          if (livesRemaining == 0){
+            paused = !paused;
+          }
+       }
+        // draw benefit
+        var imgB = document.getElementById("gas");
+        ctx.drawImage(imgB, benefit.x, benefit.y, 50, 50);
+        
+        // check for benefit collision
+         if (Math.abs(player.y - benefit.y) < 15 && player.x - benefit.x >= 16){
+          score = score + 1;
+       }
+       
+        // draw text (lives and score)
+        
+        ctx.font = "30px Arial";
+        ctx.fillStyle= "white";
+        ctx.fillText("Lives: " + livesRemaining, 10, 23);
+        ctx.fillText("Level: " + level, 130, 23);
+        ctx.fillText("Score: " + score, 275, 23);
+        // game over
+      
+        //  if the game has not been paused, 
+        if (!paused) {
+          requestAnimationFrame(animate);
+        }
+        
+      }
+      
+      animate();
+      //  event handler for moving player
+      //    use onKeyPress event, and change the player.y value based on the up/down keys
+      
+  document.addEventListener("keydown", move );
+        function move (e) {
+         
+          if (e.keyCode == 40 && player.y < 345){
+            player.y = player.y + 105;
+      //      console.log(player.y);
+          }
+          if (e.keyCode == 38 && player.y > 30){
+            player.y = player.y - 105;
+    //        console.log(player.y);
+          }
+          
+        }
+         c.addEventListener("click",pauseg);
+      function pauseg(){
+        if(livesRemaining == 1){
+        paused = !paused;
+        $("#pausegame").show();
+        if(!paused){
+        animate();
+        }
+    }
+      }
+    </script>
+    <br>
+    <center><input type="button" value="Retry" onClick="window.location.href=window.location.href">
+    </center>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Canvas Text Example</title>
+  <style>
+    canvas {
+      border: #333 10px solid;
+    }
+  </style>
+</head>
+ 
+<body>
+  <canvas id="myCanvas" width="550px" height="350px"></canvas>
+ 
+  <script>
+ var canvas = document.querySelector("#myCanvas");
+var context = canvas.getContext("2d");
+ 
+context.fillText("Albert", 40, 125);
+context.strokeText("Albert", 40, 275);
+  </script>
+ 
+</body>
+ 
+</html>
