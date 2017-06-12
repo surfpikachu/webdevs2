@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Canvas Game</title>
-    <script src="jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
     <canvas id="myCanvas" width="900" height="450" style="border:1px solid #d3d3d3;"></canvas>
@@ -143,9 +143,7 @@ var hcollide = true;
       }
       
       animate();
-      //  event handler for moving player
-      //    use onKeyPress event, and change the player.y value based on the up/down keys
-      
+      // player move
   document.addEventListener("keydown", move );
         function move (e) {
          
@@ -163,7 +161,6 @@ var hcollide = true;
       function pauseg(){
         if(livesRemaining == 1){
         paused = !paused;
-        $("#pausegame").show();
         if(!paused){
         animate();
         }
@@ -171,7 +168,8 @@ var hcollide = true;
       }
     </script>
     <br>
-    <center><input type="button" value="Retry" onClick="window.location.href=window.location.href">
+    <center>
+      <input type="button" value="Retry" onClick="window.location.href=window.location.href">
     </center>
   </body>
 </html>
